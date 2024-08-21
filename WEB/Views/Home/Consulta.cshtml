@@ -1,0 +1,38 @@
+﻿ @model List<WEB.Entitites.Principal>
+
+ @{
+     ViewData["Title"] = "Consulta";
+     Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+
+<div class="card">
+    <div class="card-body register-card-body">
+        <div class="d-flex justify-content-center">
+            <h4 class="border border-2 p-2 login-box-msg">Consulta</h4>
+        </div>
+
+        <table id="tabla-Carrito" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Codigo Compra</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Saldo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CodigoCompra</td>
+                        <td>@item.Descripcion</td>
+                        <td>¢ @item.PrecioUnitario.ToString("N2")</td>
+                        <td>¢ @item.Saldo.ToString("N2")</td>
+                        <td>@(item.Estado ? "CANCELADO" : "PENDIENTE")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

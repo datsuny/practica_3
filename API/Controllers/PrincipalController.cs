@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductoController(IConfiguration iConfiguration) : ControllerBase
+    public class PrincipalController(IConfiguration iConfiguration) : ControllerBase
     {
 
         // [Authorize]
@@ -20,7 +20,7 @@ namespace API.Controllers
 
             using (var context = new SqlConnection(iConfiguration.GetSection("ConnectionStrings:DefaultConnection").Value))
             {
-                var result = await context.QueryAsync<Producto>("ConsultarProductos",
+                var result = await context.QueryAsync<Principal>("ConsultarProductos",
                     new { },
                     commandType: System.Data.CommandType.StoredProcedure);
 

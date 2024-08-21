@@ -1,6 +1,6 @@
-﻿namespace API.Entitites
+﻿namespace WEB.Entitites
 {
-    public class Abono
+    public class Abonos
     {
         public int IdAbono { get; set; }
         public decimal MontoAbono { get; set; }

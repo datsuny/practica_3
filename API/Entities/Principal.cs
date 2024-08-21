@@ -1,6 +1,6 @@
 ﻿namespace API.Entitites
 {
-    public class Producto
+    public class Principal
     {
         public int CodigoCompra { get; set; }
         public string? Descripcion { get; set; }

@@ -11,24 +11,24 @@ USE [Practica_3]
 GO
 
 -- Tables.
-CREATE TABLE [dbo].[tProducto](
+CREATE TABLE [dbo].[Principal](
 	[CodigoCompra] [int] IDENTITY(1,1) NOT NULL,
 	[Descripcion] [varchar](500) NOT NULL,
 	[PrecioUnitario] [decimal](18, 2) NOT NULL,
 	[Saldo] [decimal](18, 2) NOT NULL,
 	[Estado] [bit] NOT NULL,
- CONSTRAINT [PK_tProducto] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Principal] PRIMARY KEY CLUSTERED 
 (
 	[CodigoCompra] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[tAbono](
+CREATE TABLE [dbo].[Abonos](
 	[IdAbono] [int] IDENTITY(1,1) NOT NULL,
 	[MontoAbono] [decimal](18, 2) NOT NULL,
-	[CodigoCompraProductoID] [int] NOT NULL,
- CONSTRAINT [PK_tAbono] PRIMARY KEY CLUSTERED 
+	[CodigoCompraPrincipalID] [int] NOT NULL,
+ CONSTRAINT [PK_Abonos] PRIMARY KEY CLUSTERED 
 (
 	[IdAbono] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -36,25 +36,25 @@ CREATE TABLE [dbo].[tAbono](
 GO
 
 -- INSERTS.
-SET IDENTITY_INSERT [dbo].[tProducto] ON 
+SET IDENTITY_INSERT [dbo].[Principal] ON 
 GO
-INSERT [dbo].[tProducto] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
+INSERT [dbo].[Principal] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
 (1, N'Camiseta Sport del Real Madrid Númer 9', CAST(10000.00 AS Decimal(18, 2)), 0, 1)
 GO
-INSERT [dbo].[tProducto] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
+INSERT [dbo].[Principal] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
 (2, N'Camiseta Sport del FC Barcelona Númer 9', CAST(20000.00 AS Decimal(18, 2)), CAST(20000.00 AS Decimal(18, 2)), 0)
 GO
-INSERT [dbo].[tProducto] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
+INSERT [dbo].[Principal] ([CodigoCompra], [Descripcion], [PrecioUnitario], [Saldo], [Estado]) VALUES 
 (3, N'Camiseta Sport del Juventus Númer 9', CAST(30000.00 AS Decimal(18, 2)), CAST(30000.00 AS Decimal(18, 2)), 0)
 GO
-SET IDENTITY_INSERT [dbo].[tProducto] OFF
+SET IDENTITY_INSERT [dbo].[Principal] OFF
 GO
 
 -- Foreign Key.
-ALTER TABLE [dbo].[tAbono]  WITH CHECK ADD  CONSTRAINT [FK_tAbono_tProducto] FOREIGN KEY([CodigoCompraProductoID])
-REFERENCES [dbo].[tProducto] ([CodigoCompra])
+ALTER TABLE [dbo].[Abonos]  WITH CHECK ADD  CONSTRAINT [FK_Abonos_Principal]FOREIGN KEY([CodigoCompraPrincipalID])
+REFERENCES [dbo].[Principal] ([CodigoCompra])
 GO
-ALTER TABLE [dbo].[tAbono] CHECK CONSTRAINT [FK_tAbono_tProducto]
+ALTER TABLE [dbo].[Abonos] CHECK CONSTRAINT [FK_Abonos_Principal]
 GO
 
 -- SP.
@@ -66,8 +66,9 @@ BEGIN
 	SELECT	CodigoCompra,
 			Descripcion,
 			PrecioUnitario,
+			Saldo,
 			Estado
-	  FROM	dbo.tProducto prod
+	  FROM	dbo.Principal prod
 	  ORDER BY Estado
 
 END
@@ -81,8 +82,9 @@ BEGIN
 	SELECT	CodigoCompra,
 			Descripcion,
 			PrecioUnitario,
+			Saldo,
 			Estado
-	  FROM	dbo.tProducto prod
+	  FROM	dbo.Principal prod
 	  WHERE CodigoCompra = @CodigoCompraID
 END
 GO
