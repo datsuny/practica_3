@@ -75,7 +75,7 @@ END
 GO
 
 CREATE PROCEDURE [dbo].[ConsultarProducto]
-	@CodigoCompraID INT
+	@CodigoCompra INT
 AS
 BEGIN
 
@@ -85,7 +85,32 @@ BEGIN
 			Saldo,
 			Estado
 	  FROM	dbo.Principal prod
-	  WHERE CodigoCompra = @CodigoCompraID
+	  WHERE CodigoCompra = @CodigoCompra
+END
+GO
+
+CREATE PROCEDURE [dbo].[AbonarMonto]
+	@MontoAbono INT,
+	@CodigoCompraPrincipalID INT
+AS
+BEGIN
+	
+	INSERT	INTO [dbo].[Abonos] (MontoAbono, CodigoCompraPrincipalID) 
+	VALUES (@MontoAbono, @CodigoCompraPrincipalID)
+
+	UPDATE Principal
+	SET Saldo = Saldo - @MontoAbono,
+	Estado = IIF(Saldo = @MontoAbono, 1, 0)
+	WHERE CodigoCompra = @CodigoCompraPrincipalID
+
+	SELECT	CodigoCompra,
+			Descripcion,
+			PrecioUnitario,
+			Saldo,
+			Estado
+	FROM Principal
+	WHERE CodigoCompra = @CodigoCompraPrincipalID
+
 END
 GO
 

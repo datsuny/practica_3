@@ -1,4 +1,6 @@
-﻿@{
+﻿@model WEB.Entitites.Abonos
+
+@{
     ViewData["Title"] = "Registro";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,5 +10,41 @@
         <div class="d-flex justify-content-center">
             <h4 class="border border-2 p-2 login-box-msg">Registro</h4>
         </div>
+
+        @using (Html.BeginForm("AbonarMonto", "Home"))
+        {
+             <div class="input-group mb-3">
+                <label>Compra</label>
+                <select class="form-select" id="compra" required onchange="limpiarCampos()">
+                    <option value="">Seleccione una opcion</option>
+                    @foreach (var item in ViewBag.Pendientes)
+                    {
+                        <option value="@item.CodigoCompra">@item.Descripcion</option>
+                    }
+                    </select>
+                <button class="btn btn-secondary" onclick="seleccionarProducto()" type="button">Consultar</button>
+            </div>
+
+            <label>Saldo Anterior</label>
+            <div class="input-group mb-3">
+                <input class="form-control" readonly id="saldoAnterior" min="1" required />
+            </div>
+
+            <label>Abono</label>
+            <div class="input-group mb-3">
+                @Html.TextBoxFor(m => m.MontoAbono, new { @type="number", @min="1", @max="1", @class="form-control", @required="true" })
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+                </div>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary btn-block" id="abonar" disabled>Abonar</button>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.CodigoCompraPrincipalID, new { @required="true" })
+        }
     </div>
 </div>
+
+<script src="~/js/Productos.js"></script>

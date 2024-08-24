@@ -10,6 +10,7 @@ builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IPrincipalModel, PrincipalModel>();
+builder.Services.AddScoped<IAbonoModel, AbonoModel>();
 
 
 var app = builder.Build();

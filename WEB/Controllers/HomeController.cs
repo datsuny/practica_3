@@ -7,7 +7,7 @@ using WEB.Models;
 
 namespace WEB.Controllers
 {
-    public class HomeController(IPrincipalModel iProductoModel) : Controller
+    public class HomeController(IPrincipalModel iProductoModel, IAbonoModel iAbonoModel) : Controller
     {
 
         public IActionResult Index()
@@ -30,6 +30,37 @@ namespace WEB.Controllers
         [HttpGet]
         public IActionResult Registro()
         {
+            var respuesta = iProductoModel.ConsultarProductos();
+            if (respuesta.Codigo == 1)
+            {
+                var datos = JsonSerializer.Deserialize<List<Principal>>((JsonElement)respuesta.Contenido!);
+                var pendientes = datos.Where(d => !d.Estado).ToList();
+                ViewBag.Pendientes = pendientes;
+                return View(new Abonos());
+            }
+            return View(new Abonos());
+        }
+
+        [HttpGet]
+        public IActionResult ConsultaProducto(int codigoCompra)
+        {
+            var respuesta = iProductoModel.ConsultarProducto(codigoCompra);
+            if (respuesta.Codigo == 1)
+            {
+                var datos = JsonSerializer.Deserialize<Principal>((JsonElement)respuesta.Contenido!);
+                return Json(datos);
+            }
+            return Json(null);
+        }
+
+        [HttpPost]
+        public IActionResult AbonarMonto(Abonos abono)
+        {
+            var respuesta = iAbonoModel.AbonarMonto(abono);
+            if (respuesta.Codigo == 1)
+            {
+                return RedirectToAction("Consulta");
+            }
             return View();
         }
 
